@@ -29,7 +29,7 @@ function renderDeclaration(d) {
     `<span class="k">module</span> <span class="s">"webapp"</span> {\n` +
     `  <span class="a">source</span> = <span class="s">"../modules/webapp"</span>\n\n` +
     `${body}\n}\n\n` +
-    `<span class="c"># The module sets encryption = true on every\n# database, and refuses the shared dev plan.</span>`;
+    `<span class="c"># Set by the module, not here:\n# encryption = true, no dev plan</span>`;
   $('source').textContent = d.source;
 }
 
