@@ -24,6 +24,7 @@ const declared = {
   dbVersion: env.IAC_DB_VERSION || null,
   dbEncryption: env.IAC_DB_ENCRYPTION ? env.IAC_DB_ENCRYPTION === 'true' : null,
   dbBackup: env.IAC_DB_BACKUP ? env.IAC_DB_BACKUP === 'true' : null,
+  dbId: env.IAC_DB_ID || null,
 };
 
 // This instance, as measured from inside it.

@@ -51,6 +51,9 @@ resource "clevercloud_nodejs" "app" {
     # Read back from the API by the provider, not copied from this file.
     IAC_DB_ENCRYPTION = tostring(clevercloud_postgresql.db.encryption)
     IAC_DB_BACKUP     = tostring(clevercloud_postgresql.db.backup)
+    # A new database means a new ID, so a changed environment: the provider
+    # then restarts the app, which picks up the new POSTGRESQL_ADDON_URI.
+    IAC_DB_ID = clevercloud_postgresql.db.id
   }
 
   # Terraform pushes the repository HEAD at creation, then whenever HEAD changes.

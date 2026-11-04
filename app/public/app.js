@@ -106,8 +106,8 @@ function renderDatabase(st) {
     ['Plan', d.dbPlan],
     ['Encryption at rest', onOff(d.dbEncryption)],
     ['Daily backups', onOff(d.dbBackup)],
-    ['Region', d.region],
     ['Size on disk', db.bytes ? size(Math.round(db.bytes / 1048576)) : null],
+    ['Add-on', d.dbId],
   ]);
   const pill = $('db-pill');
   pill.textContent = db.connected ? 'connected' : db.error || 'unreachable';
