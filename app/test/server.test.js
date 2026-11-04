@@ -41,6 +41,8 @@ test('home page shows the environment', async () => {
   assert.match(html, /This is <span class="env-name">staging<\/span>/);
   assert.match(html, /class="env-staging"/);
   assert.doesNotMatch(html, /__[A-Z]+__/);
+  assert.match(html, /href="https:\/\/academy\.clever\.cloud\/"/);
+  assert.match(html, /class="cc-cert__badge"/);
   assert.match(res.headers.get('content-security-policy'), /script-src 'self'/);
 });
 

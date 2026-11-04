@@ -10,6 +10,8 @@
 
 **Run it yourself.** The hosted demo was taken down after the presales proof (November 2026). [Deploy on Clever Cloud](#deploy-on-clever-cloud) recreates the bootstrap and an environment in about 5 minutes, most of it the first build.
 
+**Get certified.** This demo runs on Clever Cloud. To deploy your own apps the same way, get certified at the [Clever Cloud Academy](https://academy.clever.cloud/).
+
 ## What Terraform does here
 
 | Where | Terraform feature | What you see |
