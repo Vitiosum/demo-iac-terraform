@@ -46,21 +46,35 @@ function uptime(since) {
 
 function renderInstances(st) {
   const d = st.declared;
+  const me = st.instances.find((i) => i.self);
   const current = st.instances.filter((i) => i.current);
   const stopping = st.instances.length - current.length;
-  $('instances').innerHTML = st.instances
-    .map((i) => {
-      const cls = ['tile', i.self ? 'tile--self' : '', i.current ? '' : 'tile--old'].join(' ');
-      const tag = i.self ? 'Served this page' : i.current ? '' : 'Previous deployment';
-      return `<div class="${cls}">
+  const alive = st.instances.map((i) => {
+    const cls = ['tile', i.self ? 'tile--self' : '', i.current ? '' : 'tile--old'].join(' ');
+    let tag = '';
+    if (i.self) tag = 'Served this page';
+    else if (!i.current) tag = me && new Date(i.startedAt) > new Date(me.startedAt) ? 'New deployment' : 'Previous deployment';
+    return `<div class="${cls}">
         <span class="tile__led" aria-hidden="true"></span>
         <div class="tile__num"><small>#</small>${esc(i.number)}</div>
         <div class="tile__size">${esc(i.vcpus)} vCPU · ${esc(size(i.memoryMb))}</div>
         <div class="tile__meta">up ${esc(uptime(i.startedAt))} · ${esc(i.requests)} req.</div>
         ${tag ? `<span class="tile__tag">${tag}</span>` : ''}
       </div>`;
-    })
-    .join('');
+  });
+  // Declared but not running (yet): below the minimum, or room left for autoscaling.
+  const missing = d.minInstances === null ? 0 : Math.max(0, d.minInstances - current.length);
+  const room = d.maxInstances === null ? 0 : Math.max(0, d.maxInstances - Math.max(current.length, d.minInstances));
+  const empty = (label, hint, cls) => `<div class="tile tile--empty ${cls}">
+        <div class="tile__num"><small>#</small>?</div>
+        <div class="tile__size">${label}</div>
+        <div class="tile__meta">${hint}</div>
+      </div>`;
+  $('instances').innerHTML = [
+    ...alive,
+    ...Array.from({ length: missing }, () => empty('Declared', 'starting…', 'tile--starting')),
+    ...Array.from({ length: room }, () => empty('Room to scale', `autoscaling up to ${d.maxInstances}`, '')),
+  ].join('');
 
   const pill = $('match');
   if (d.minInstances === null) {
@@ -86,11 +100,13 @@ function kv(rows) {
 function renderDatabase(st) {
   const db = st.database;
   const d = st.declared;
-  const encryption = d.dbEncryption === null ? null : d.dbEncryption ? 'on' : 'off';
+  const onOff = (v) => (v === null ? null : v ? 'on' : 'off');
   $('database').innerHTML = kv([
     ['Engine', db.version ? `PostgreSQL ${db.version.split(' ')[0]}` : null],
     ['Plan', d.dbPlan],
-    ['Encryption at rest', encryption],
+    ['Encryption at rest', onOff(d.dbEncryption)],
+    ['Daily backups', onOff(d.dbBackup)],
+    ['Region', d.region],
     ['Size on disk', db.bytes ? size(Math.round(db.bytes / 1048576)) : null],
   ]);
   const pill = $('db-pill');

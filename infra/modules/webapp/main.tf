@@ -50,6 +50,7 @@ resource "clevercloud_nodejs" "app" {
     IAC_DB_VERSION       = var.db_version
     # Read back from the API by the provider, not copied from this file.
     IAC_DB_ENCRYPTION = tostring(clevercloud_postgresql.db.encryption)
+    IAC_DB_BACKUP     = tostring(clevercloud_postgresql.db.backup)
   }
 
   # Terraform pushes the repository HEAD at creation, then whenever HEAD changes.
