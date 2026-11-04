@@ -57,7 +57,7 @@ function renderInstances(st) {
     return `<div class="${cls}">
         <span class="tile__led" aria-hidden="true"></span>
         <div class="tile__num"><small>#</small>${esc(i.number)}</div>
-        <div class="tile__size">${esc(i.vcpus)} vCPU · ${esc(size(i.memoryMb))}</div>
+        <div class="tile__size">${esc(i.vcpus)} vCPU<br>${esc(size(i.memoryMb))} RAM</div>
         <div class="tile__meta">up ${esc(uptime(i.startedAt))} · ${esc(i.requests)} req.</div>
         ${tag ? `<span class="tile__tag">${tag}</span>` : ''}
       </div>`;
