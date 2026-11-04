@@ -1,7 +1,7 @@
 # Staging: the smallest footprint, one fixed nano instance.
 
 terraform {
-  required_version = ">= 1.9"
+  required_version = ">= 1.11"
 
   required_providers {
     clevercloud = {
@@ -10,8 +10,22 @@ terraform {
     }
   }
 
-  # The state stays local, next to this file, and is ignored by git:
-  # it holds the database password.
+  # The state lives in the Cellar bucket created by infra/bootstrap, one key
+  # per environment. Bucket, endpoint and keys come from the file the
+  # bootstrap writes: terraform init -backend-config=../cellar.s3.tfbackend
+  backend "s3" {
+    key          = "staging/terraform.tfstate"
+    use_lockfile = true
+
+    # Cellar speaks S3: these settings turn off what only AWS has.
+    region                      = "us-east-1"
+    use_path_style              = true
+    skip_region_validation      = true
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_requesting_account_id  = true
+    skip_s3_checksum            = true
+  }
 }
 
 # Credentials: those of `clever login`, read by the provider from clever-tools.

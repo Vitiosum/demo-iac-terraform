@@ -11,5 +11,7 @@ tfplan
 crash.log
 crash.*.log
 *.tfvars
+# Written by infra/bootstrap: the Cellar keys of the state backend.
+*.tfbackend
 override.tf
 *_override.tf
