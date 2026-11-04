@@ -13,8 +13,10 @@ terraform {
   # The state lives in the Cellar bucket created by infra/bootstrap, one key
   # per environment. Bucket, endpoint and keys come from the file the
   # bootstrap writes: terraform init -backend-config=../cellar.s3.tfbackend
+  # The key stays at the root of the bucket: provider 3.0.0 empties a bucket
+  # without looking into folders, so "staging/x" would block the bootstrap destroy.
   backend "s3" {
-    key          = "staging/terraform.tfstate"
+    key          = "staging.tfstate"
     use_lockfile = true
 
     # Cellar speaks S3: these settings turn off what only AWS has.
