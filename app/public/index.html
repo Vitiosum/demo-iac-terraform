@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#13172e">
+<meta name="robots" content="noindex, nofollow">
+<title>Blueprint · __ENVIRONMENT__ · Terraform on Clever Cloud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/cc-brand.css">
+<link rel="stylesheet" href="/app.css">
+<link rel="icon" href="/cc-logo.svg" type="image/svg+xml">
+</head>
+<body class="env-__ENVIRONMENT__">
+<header class="cc-topbar">
+  <div class="cc-container cc-topbar__inner">
+    <a href="/" aria-label="Blueprint">__LOGO__</a>
+    <span class="cc-topbar__sep"></span>
+    <div class="cc-topbar__demo"><small>Infrastructure as code · Terraform</small>Blueprint</div>
+    <span class="cc-topbar__spacer"></span>
+    <span class="env-pill" id="env-pill">__ENVIRONMENT__</span>
+  </div>
+</header>
+
+<main class="cc-container page">
+  <section class="hero">
+    <p class="cc-eyebrow">Declared in code, running on Clever Cloud</p>
+    <h1 class="hero__title">This is <span class="env-name">__ENVIRONMENT__</span>.</h1>
+    <p class="hero__lead" id="lead">Everything on this page was described in a Terraform file and created by <code>terraform apply</code>: the app, its size, its PostgreSQL database and the link between them. Change a number in the file, read the plan, apply it, and the page follows.</p>
+  </section>
+
+  <section class="board">
+    <article class="cc-platform panel">
+      <header class="cc-platform__head">
+        <h3>Declared</h3>
+        <span class="cc-pill cc-pill--mono" id="source">infra/…/main.tf</span>
+      </header>
+      <pre class="cc-code hcl" id="declaration" aria-label="Terraform declaration"></pre>
+      <p class="cc-platform__foot">The module turns these inputs into a <code>clevercloud_nodejs</code> app and a <code>clevercloud_postgresql</code> database.</p>
+    </article>
+
+    <article class="cc-platform panel">
+      <header class="cc-platform__head">
+        <h3>Running now</h3>
+        <span class="cc-pill" id="match">…</span>
+      </header>
+      <div class="instances" id="instances"></div>
+      <p class="cc-platform__foot" id="instances-foot">Each instance writes a heartbeat into PostgreSQL every 3 s. This page asks every 3 s which ones are alive.</p>
+    </article>
+  </section>
+
+  <section class="board">
+    <article class="cc-platform panel">
+      <header class="cc-platform__head">
+        <h3>Database</h3>
+        <span class="cc-pill" id="db-pill">…</span>
+      </header>
+      <dl class="cc-kv" id="database"></dl>
+      <p class="cc-platform__foot">Linked by <code>dependencies = [clevercloud_postgresql.db.id]</code>: Clever Cloud injects <code>POSTGRESQL_ADDON_URI</code>, read by the app at runtime.</p>
+    </article>
+
+    <article class="cc-platform panel">
+      <header class="cc-platform__head">
+        <h3>Running on Clever Cloud</h3>
+        <span class="cc-pill cc-pill--mono" id="served-by">…</span>
+      </header>
+      <dl class="cc-kv" id="platform"></dl>
+      <p class="cc-platform__foot">Variables set by the platform on every instance. Nothing else from the environment is shown.</p>
+    </article>
+  </section>
+
+  <section class="loop" aria-label="The demo loop">
+    <h2 class="loop__title">The loop</h2>
+    <ol class="loop__steps">
+      <li><span class="loop__num">1</span><strong>Edit</strong><code>min_instances = 2</code></li>
+      <li><span class="loop__num">2</span><strong>Review</strong><code>terraform plan</code></li>
+      <li><span class="loop__num">3</span><strong>Apply</strong><code>terraform apply</code></li>
+      <li><span class="loop__num">4</span><strong>Clean up</strong><code>terraform destroy</code></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="cc-footer">
+  <div class="cc-container">
+    <div class="cc-footer__bottom"><span>Fictional demo · Clever Cloud presales</span><span id="updated">live</span></div>
+  </div>
+</footer>
+<script type="application/json" id="initial-state">__STATE__</script>
+<script src="/app.js" defer></script>
+</body>
+</html>

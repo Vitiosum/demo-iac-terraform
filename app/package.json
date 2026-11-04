@@ -1,0 +1,19 @@
+{
+  "name": "blueprint",
+  "version": "1.0.0",
+  "description": "Shows what Terraform declared and what runs on Clever Cloud",
+  "private": true,
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": "24"
+  },
+  "dependencies": {
+    "pg": "8.23.1"
+  },
+  "license": "MIT"
+}
