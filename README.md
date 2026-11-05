@@ -133,7 +133,7 @@ Then `terraform destroy` in `infra/bootstrap` empties the bucket (the states wit
 
 A code change goes through the same loop: commit it, and the next plan shows `~ deployment { ~ commit = "cbf4ae8…" -> "ad6d6c8…" }` before Terraform pushes it.
 
-`infra/production` was planned during the proof on its own key in the same bucket (`Plan: 2 to add`, flavor `nano to XS`), not applied: the loop above is the same in both folders.
+`infra/production` runs the same loop on its own key in the same bucket, proved on Clever Cloud: `Plan: 2 to add` (flavor `nano to XS`, one instance), `terraform apply` in 12 s, and the page answered *This is production* 59 s later, its encrypted database connected. Destroy production first, the bootstrap last.
 
 ### Seen during the proof
 
