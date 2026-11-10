@@ -2,6 +2,8 @@
 
 > A platform team describes its environments in code. Here, `infra/staging` and `infra/production` call the same module: a Node.js app, its PostgreSQL database **encrypted at rest**, the link between them, a declared size and an instance count. Their Terraform state lives on Clever Cloud too, in a **Cellar** bucket created by a small bootstrap stage, with a lock. `terraform plan` reads like a code review, `terraform apply` creates the lot in seconds, and the app shows what was declared next to what actually runs: every instance writes a heartbeat into PostgreSQL. Raise the instance count, read the diff in the plan, apply it, and a second instance lights up. Two `terraform destroy` leave nothing behind. Built on the official provider [`CleverCloud/clevercloud`](https://registry.terraform.io/providers/CleverCloud/clevercloud/latest) v3.
 
+![The app run locally with a local PostgreSQL: two instances are declared, a second instance starts, writes its heartbeat and lights up, then stops](docs/tour.gif)
+
 ![Staging after the change: two instances alive, as declared](docs/staging.png)
 
 | Phone, the declaration | Phone, what runs |
@@ -175,6 +177,8 @@ To remove everything, in this order: `terraform destroy` in each environment fol
 
 Each environment folder deploys the repository it sits in (`repo_root = "../.."`, `app_folder = "app"`). From another layout, pass both: `terraform plan -var repo_root=<path to the git root, relative to the folder> -var app_folder=<path of app/ from that root>`.
 
+To follow the naming convention of your organisation, `infra/staging` takes the name prefix as a variable: `terraform plan -var name=<prefix> -out=tfplan` names the app `<prefix>-staging` and its database `<prefix>-staging-db` (default `blueprint`). Pass the same `-var name=<prefix>` to every later `plan`, `apply` and `destroy`, or write it once in `infra/staging/terraform.tfvars`. Do not rename the app in the Console or with clever-tools: the name belongs to the code, and the next `terraform apply` would set it back. `infra/production` keeps the module default, `blueprint-production`.
+
 ### Authentication
 
 The provider reads the credentials of `clever login` from the clever-tools configuration file (`~/.config/clever-cloud/clever-tools.json`). Nothing is exported, nothing is written in the code. In a CI pipeline, export `CC_OAUTH_TOKEN` and `CC_OAUTH_SECRET` instead. According to the provider documentation, an API token (`CLEVER_API_TOKEN`, from `clever tokens create`) works for the API calls but cannot sign the git push: an app with a `deployment` block needs the OAuth credentials.
@@ -216,8 +220,8 @@ The **Running on Clever Cloud** card shows `CC_APP_NAME`, `APP_ID`, `INSTANCE_NU
 ```
 infra/bootstrap/        main.tf: Cellar add-on, bucket, the backend file for the environments; local state
 infra/modules/webapp/   the module: main.tf (database, app, link), variables.tf (guardrails), outputs.tf
-infra/staging/          main.tf: S3 backend on Cellar, provider, module call with the staging size, outputs
-infra/production/       same file, production size, its own key in the bucket
+infra/staging/          main.tf: S3 backend on Cellar, provider, module call with the staging size and the name prefix, outputs
+infra/production/       same file, production size, its own key in the bucket, default name
 app/server.js           Node.js server, no framework: routes, heartbeat into PostgreSQL, clean exit on SIGTERM
 app/public/             index.html, app.js (rendering, polling), app.css; cc-brand.css and cc-logo.svg from the Clever Brand Kit
 app/test/               smoke test: npm test starts the real server and calls every route, without a database

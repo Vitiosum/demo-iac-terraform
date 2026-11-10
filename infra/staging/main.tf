@@ -37,6 +37,7 @@ provider "clevercloud" {}
 module "webapp" {
   source = "../modules/webapp"
 
+  name            = var.name
   environment     = "staging"
   region          = "par"
   smallest_flavor = "nano"
@@ -48,6 +49,12 @@ module "webapp" {
 
   repository = "file://${abspath("${path.root}/${var.repo_root}")}"
   app_folder = var.app_folder
+}
+
+variable "name" {
+  description = "Prefix of the resource names: <name>-staging for the app, <name>-staging-db for the database."
+  type        = string
+  default     = "blueprint"
 }
 
 variable "repo_root" {
